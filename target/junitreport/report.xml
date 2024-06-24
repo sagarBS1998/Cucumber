@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="2" time="0.347">
+    <testcase classname="ckeck for page functionlity" name="check on logout link" time="0.043">
+        <system-out><![CDATA[Given user in login page....................................................passed
+When enter email and password...............................................passed
+And click submit............................................................passed
+Then navigated to home......................................................passed
+When user click on welcome link.............................................passed
+Then logout liink is visiable...............................................passed
+]]></system-out>
+    </testcase>
+    <testcase classname="ckeck for page functionlity" name="verfiy toolbar is present" time="0.007">
+        <system-out><![CDATA[Given user in login page....................................................passed
+When enter email and password...............................................passed
+And click submit............................................................passed
+Then navigated to home......................................................passed
+When click on dashboard link................................................passed
+Then quick lunch toolbar displayed..........................................passed
+]]></system-out>
+    </testcase>
+</testsuite>
