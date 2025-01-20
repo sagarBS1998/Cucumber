@@ -15,7 +15,6 @@ public class LoginDemopage_PF {
 	
 	LoginPage_PF login;
 
-	@Given("^browser open manually$")
 	public void brower_open() {
 	    // Write code here that turns the phrase above into concrete actions
 	    //throw new io.cucumber.java.PendingException();
@@ -31,7 +30,6 @@ public class LoginDemopage_PF {
 		driver.manage().window().maximize();
 	}
 
-	@And("user on login age manually")
 	public void user_on_login_age() throws InterruptedException {
 	    // Write code here that turns the phrase above into concrete actions
 	    //throw new io.cucumber.java.PendingException();
@@ -40,7 +38,6 @@ public class LoginDemopage_PF {
 		System.out.println("login page");
 	}
 
-	@When("user enter {string} and {string} manualy")
 	public void user_enter_email_and_password(String email, String password2) throws InterruptedException {
 	    // Write code here that turns the phrase above into concrete actions
 	    //throw new io.cucumber.java.PendingException();
@@ -58,7 +55,6 @@ public class LoginDemopage_PF {
 		System.out.println("login page555555");
 		
 	}
-	@And("user click on submit manualy")
 	public void user_click_on_submit() throws InterruptedException {
 		System.out.println("login page9999");
 		login.clickonsubmit();
@@ -70,7 +66,6 @@ public class LoginDemopage_PF {
 	}
 	
 
-	@Then("user navigate to home page manualy")
 	public void user_navigate_to_home_page() throws InterruptedException {
 	    // Write code here that turns the phrase above into concrete actions
 	    //throw new io.cucumber.java.PendingException();
