@@ -4,9 +4,11 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 import io.cucumber.java.en.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class LoginDemopage {
 	WebDriver driver = null;
@@ -53,9 +55,46 @@ public class LoginDemopage {
 		driver.findElement(By.xpath("//a[@href='#' and @class='dropdown-toggle' and text()='Help']")).click();
 		System.out.println("Help dropdown clicked.");
 
-		// Cleanup
+
+	}
+	@Then("click on setting")
+	public void clickOnSetting() throws InterruptedException {
+		Thread.sleep(2000);
+		// Locate the settings button and click it
+		driver.findElement(By.xpath("//a[normalize-space()='Settings']")).click();
+
+	}
+
+	@Then("search Newsletter")
+	public void searchNewsletter() throws InterruptedException {
+		Thread.sleep(2000);
+		// Locate the search input, type "Newsletter" and search
+		//driver.findElement(By.xpath("(//div[normalize-space()='Newsletters'])[1]")).findElement();
+		WebElement element = driver.findElement(By.xpath("//*[@id=\"notification\"]/div/div[1]"));
+		String actualText = element.getText();
+
+// Expected text
+		String expectedText = "Newsletters";
+
+// Validate the text
+		if (actualText.equals(expectedText)) {
+			System.out.println("Text validation passed: " + actualText);
+		} else {
+			System.out.println("Text validation failed. Expected: " + expectedText + ", but got: " + actualText);
+
+			//driver.findElement(By.xpath("//a[@href='#' and @class='dropdown-toggle' and text()='Help']")).click();
+
+		}
+	}
+	@And("click on Submit button")
+
+	public void clickOnSubmitButton() throws InterruptedException {
+		// Locate and click the Submit button
+		driver.findElement(By.xpath("//*[@id=\"notification\"]/div/form/button")).click();
+// Cleanup
 		Thread.sleep(2000);
 		driver.close();
 		driver.quit();
 	}
+
 }

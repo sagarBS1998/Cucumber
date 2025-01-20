@@ -6,6 +6,9 @@ Feature: login check
     When user enter "<email>" and "<password>" using page factory
     And user click on submit using page factory
     Then user navigate to home page
+    Then click on setting
+    Then search Newsletter
+    And click on Submit button
 
     Examples:
       |email								|password|
