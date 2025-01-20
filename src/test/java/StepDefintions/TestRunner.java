@@ -10,8 +10,8 @@ import io.cucumber.junit.CucumberOptions;
     features = {"src/test/resources/Feature"}, 
     glue = {"StepDefintions"},
         tags = "@logon_demo",
-    monochrome=true,
-    plugin= {"pretty","html:target/HtmlReport"}
+    monochrome=true
+    //plugin= {"pretty","html:target/HtmlReport"}
     )
 
 public class TestRunner {
