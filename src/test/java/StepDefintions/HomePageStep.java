@@ -9,6 +9,9 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.devtools.DevTools;
+import org.openqa.selenium.devtools.v85.network.Network;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -17,12 +20,14 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 
 public class HomePageStep {
     WebDriver driver;
+    DevTools devTools;
 
 
 
@@ -103,64 +108,129 @@ public class HomePageStep {
 
     }
 
+    //---------------------------------------------------------------
+
+
+
     @And("click on Book your free counseling CTA")
     public void clickOnBookYourFreeCounselingCTA() {
         iSearchForTheActiveButtonOnPopupAndClickIt();
     }
-    public void iSearchForTheActiveButtonOnPopupAndClickIt(){
-    {
-            boolean isButtonClicked = false;
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Create a WebDriverWait instance
-            int retryCount = 0; // Retry counter
-            int maxRetries = 1; // Maximum retries to prevent infinite loop
 
-            while (!isButtonClicked && retryCount < maxRetries) {
-                try {
-                    // Find all buttons matching the XPath
-                    List<WebElement> buttons = driver.findElements(By.xpath("//button[normalize-space()='Book Your Free Counseling']"));
+    public void iSearchForTheActiveButtonOnPopupAndClickIt() {
+        boolean isButtonClicked = false;
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Create a WebDriverWait instance
 
-                    // Traverse through each button
-                    for (WebElement button : buttons) {
-                        if (button.isDisplayed() && button.isEnabled()) { // Ensure the button is visible and active
-                            try {
-                                // Wait until the button is clickable
-                                wait.until(ExpectedConditions.elementToBeClickable(button));
+        try {
+            // Find all buttons matching the XPath
+            List<WebElement> buttons = driver.findElements(By.xpath("//button[normalize-space()='Book Your Free Counseling']"));
 
-                                // Click the button
-                                button.click(); // Use regular click method
-                                System.out.println("Active button clicked.");
-                                isButtonClicked = true; // Mark as clicked
-                                break; // Exit the loop after clicking the button
-                            } catch (Exception innerEx) {
-                                System.err.println("Error clicking the button: " + innerEx.getMessage());
-                            }
-                        }
-                    }
+            // Traverse through each button
+            for (WebElement button : buttons) {
+                if (button.isDisplayed() && button.isEnabled() && isElementInViewport(driver, button)) {
+                    try {
+                        // Wait until the button is clickable
+                        wait.until(ExpectedConditions.elementToBeClickable(button));
 
-                    if (!isButtonClicked) {
-                        System.out.println("No active button found or clickable in popup. Retrying...");
-                    }
-                } catch (Exception e) {
-                    System.err.println("An error occurred while searching for the active button: " + e.getMessage());
-                }
-
-                // Retry mechanism
-                if (!isButtonClicked) {
-                    retryCount++;
-                    if (retryCount < maxRetries) {
-                        try {
-                            Thread.sleep(2000); // Optional: Add a short delay before retrying
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt(); // Restore the interrupted status
-                            System.err.println("Thread interrupted: " + e.getMessage());
-                        }
-                    } else {
-                        System.err.println("Max retries reached. Could not find or click the active button.");
+                        // Click the button
+                        button.click(); // Use regular click method
+                        System.out.println("Active button clicked.");
+                        isButtonClicked = true; // Mark as clicked
+                        break; // Exit the loop after clicking the button
+                    } catch (Exception innerEx) {
+                        System.err.println("Error clicking the button: " + innerEx.getMessage());
                     }
                 }
             }
+
+            if (!isButtonClicked) {
+                System.out.println("No active button found or clickable in popup.");
+            }
+        } catch (Exception e) {
+            System.err.println("An error occurred while searching for the active button: " + e.getMessage());
         }
     }
+
+    public boolean isElementInViewport(WebDriver driver, WebElement element) {
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+        // JavaScript to check if an element is in the viewport
+        String script =
+                "var rect = arguments[0].getBoundingClientRect();" +
+                        "return (" +
+                        "rect.top >= 0 && " +
+                        "rect.left >= 0 && " +
+                        "rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && " +
+                        "rect.right <= (window.innerWidth || document.documentElement.clientWidth)" +
+                        ");";
+        return (Boolean) jsExecutor.executeScript(script, element);
+    }
+
+
+
+//---------------------------------------------------------------
+
+    // working code replaced with above code Parth "isElementInViewport" condtion
+
+
+//    @And("click on Book your free counseling CTA")
+//    public void clickOnBookYourFreeCounselingCTA()
+//    {
+//        iSearchForTheActiveButtonOnPopupAndClickIt();
+//    }
+//    public void iSearchForTheActiveButtonOnPopupAndClickIt(){
+//    {
+//            boolean isButtonClicked = false;
+//            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // Create a WebDriverWait instance
+//            int retryCount = 0; // Retry counter
+//            int maxRetries = 1; // Maximum retries to prevent infinite loop
+//
+//            while (!isButtonClicked && retryCount < maxRetries) {
+//                try {
+//                    // Find all buttons matching the XPath
+//                    List<WebElement> buttons = driver.findElements(By.xpath("//button[normalize-space()='Book Your Free Counseling']"));
+//
+//                    // Traverse through each button
+//                    for (WebElement button : buttons) {
+//                        if (button.isDisplayed() && button.isEnabled()) { // Ensure the button is visible and active
+//                            try {
+//                                // Wait until the button is clickable
+//                                wait.until(ExpectedConditions.elementToBeClickable(button));
+//
+//                                // Click the button
+//                                button.click(); // Use regular click method
+//                                System.out.println("Active button clicked.");
+//                                isButtonClicked = true; // Mark as clicked
+//                                break; // Exit the loop after clicking the button
+//                            } catch (Exception innerEx) {
+//                                System.err.println("Error clicking the button: " + innerEx.getMessage());
+//                            }
+//                        }
+//                    }
+//
+//                    if (!isButtonClicked) {
+//                        System.out.println("No active button found or clickable in popup. Retrying...");
+//                    }
+//                } catch (Exception e) {
+//                    System.err.println("An error occurred while searching for the active button: " + e.getMessage());
+//                }
+//
+//                // Retry mechanism
+//                if (!isButtonClicked) {
+//                    retryCount++;
+//                    if (retryCount < maxRetries) {
+//                        try {
+//                            Thread.sleep(2000); // Optional: Add a short delay before retrying
+//                        } catch (InterruptedException e) {
+//                            Thread.currentThread().interrupt(); // Restore the interrupted status
+//                            System.err.println("Thread interrupted: " + e.getMessage());
+//                        }
+//                    } else {
+//                        System.err.println("Max retries reached. Could not find or click the active button.");
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
 
@@ -270,28 +340,51 @@ public class HomePageStep {
         WebElement exams = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//label[normalize-space()='Booked']")));
         exams.click();
-        Thread.sleep(1000);
-       // driver.close();
-       // driver.quit();
+        Thread.sleep(2000);
+        driver.close();
+        driver.quit();
     }
-//    @And("form 3 click on Book your free counseling CTA")
-//    public void form3clickOnBookYourFreeCounselingCTA() {
-//        int retryCount = 3; // Number of retries
-//        while (retryCount > 0) {
-//            try {
-//                WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
-//                WebElement submitButton1 = wait.until(ExpectedConditions.elementToBeClickable(
-//                        By.xpath("//button[@class='enquiryForm__btnOtp enquiryForm__btnOtp--active']")));
+
+
+    //---------------------------CDP session creation ------------------------
+
+//    @Given("user open the home page")
+//    public void userOpenTheHomePage() {
+//        System.out.println("Home page with CDP");
+//        String projectpath = System.getProperty("user.dir");
+//        System.setProperty("webdrive.chrome.driver",projectpath+"/src/test/resources/webdrivers/chromedriver");
 //
-//                // Scroll and click the button
-//                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", submitButton1);
-//                submitButton1.click();
-//                return; // Exit method if click succeeds
-//            } catch (Exception e) {
-//                System.err.println("Retrying... Failed to click: " + e.getMessage());
-//                retryCount--;
-//            }
-//        }
-//        System.err.println("Exhausted all retries. Could not click the button.");
+//        ChromeOptions options = new ChromeOptions();
+//        options.addArguments("--remote-allow-origins=*");
+//        driver = new ChromeDriver(options);
+//
+//        driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+//        driver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
+//        driver.manage().window().maximize();
+//        System.out.println("Home page with CDP11");
+//
+//        // Set up DevTools session
+//        devTools = ((ChromeDriver) driver).getDevTools();
+//        devTools.createSession();
+//        System.out.println("Home page with CDP22");
+//
+//        // Enable network interception
+//        devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+//
+//        // Log all network requests
+//        devTools.addListener(Network.requestWillBeSent(), request -> {
+//            System.out.println("Request URL: " + request.getRequest().getUrl());
+//        });
+//
+//        // Navigate to the home page
+//        driver.get("https://staging-abroadssr-v2.upgrad.dev/study-abroad/");
+//
+//        String expectedUrl = "https://staging-abroadssr-v2.upgrad.dev/study-abroad/";
+//        String actualUrl = driver.getCurrentUrl();
+//        Assert.assertEquals("User is not on the expected URL", expectedUrl, actualUrl);
+//
+//        // Wait for the page title to verify the page has loaded
+//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+//        wait.until(ExpectedConditions.titleContains("One-stop Destination for your entire Study Abroad Journey"));
 //    }
 }
